@@ -13,7 +13,7 @@ from speech import speak, recognizer
 
 def main():
     setup_logging()
-    speak("Hello, I am alice. How can I assist you today?")
+    speak("Hi, Myself Alice. How can I assist you today?")
     is_active = True
     
     while True:
@@ -22,7 +22,7 @@ def main():
                 command = listen_with_timeout(timeout=30)
                 if command:
                     response = None
-                    cr(command, "Received command")
+
                     if 'open' in command:
                         app_name = command.split('open')[-1].strip()
                         if oa(app_name):
@@ -37,18 +37,20 @@ def main():
                             response = print(f"Closed {app_name}.")
                         else:
                             response = f"Could not close {app_name}. Please check if it's running."
-                    
+
                     elif 'exit' in command or 'quit' in command:
                         response = "Goodbye!"
                         speak(response)
+                        cr(command, response)
                         break
                     
                     else:
                         speak("Wait: ")
                         processCommand(command)
-                    
+
                     if response:
                         speak(response)
+                        cr(command, response)
 
                 else:
                     is_active = False
@@ -72,6 +74,7 @@ def main():
         except Exception as e:
             print(f"Error occurred: {e}")
             speak(f"Error occurred: {e}")
+            cr("Error", str(e))
 
 if __name__ == "__main__":
     main()
