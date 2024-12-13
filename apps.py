@@ -44,15 +44,27 @@ def open_application(app_name):
         return False
 
 def close_application(app_name):
-    if app_name == "settings":
-        for proc in psutil.process_iter(['pid', 'name']):
-            if 'SystemSettings' in proc.info['name']:
-                proc.terminate()
-                speak(f"Closing {app_name}...")
-                return True
-        speak(f"{app_name} is not currently running.")
-        return False
 
+    process_names = {
+    "task manager": "taskmgr.exe",
+    "control panel": "control.exe", #for some reason the control panel closing was not working So I had to add the function for it
+    "settings": "SystemSettings.exe",  
+    "file explorer": "explorer.exe",
+    "command prompt": "cmd.exe",
+    "powershell": "powershell.exe",
+    "notepad": "notepad.exe",
+    "calculator": "ApplicationFrameHost.exe",
+    "chrome": "chrome.exe",
+    "edge": "msedge.exe",
+    "firefox": "firefox.exe",
+    "word": "winword.exe",
+    "excel": "excel.exe",
+    "powerpoint": "powerpnt.exe",
+    "outlook": "outlook.exe",
+    "access": "msaccess.exe",
+    "onenote": "onenote.exe"
+}
+    
     if app_name == "control panel":
         try:
             windows = gw.getWindowsWithTitle("Control Panel")
@@ -68,16 +80,7 @@ def close_application(app_name):
             speak(f"Failed to close Control Panel: {str(e)}")
             return False
 
-    process_names = {
-        "chrome": "chrome.exe",
-        "edge": "msedge.exe",
-        "notepad": "notepad.exe",
-        "word": "winword.exe",
-        "excel": "excel.exe",
-        "powerpoint": "powerpnt.exe",
-        "outlook": "outlook.exe",
-        "calculator": "ApplicationFrameHost.exe"
-    }
+   
 
     process_name = process_names.get(app_name.lower())
     if process_name:
